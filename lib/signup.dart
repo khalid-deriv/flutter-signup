@@ -11,17 +11,29 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _agreedToTOS = true;
+  String _firstName = "";
+  String _lastName = "";
+  String _email = "";
+  String _password = "";
+  String _confirmedPassword = "";
   String _gender = "Male";
   final List<String> _genders = ["Male", "Female", "Other"];
+  bool _agreedToTOS = true;
 
   bool _submittable() {
-    return _agreedToTOS;
+    return _agreedToTOS &&
+        _firstName != "" &&
+        _lastName != "" &&
+        _email != "" &&
+        _password != "" &&
+        _confirmedPassword != "";
   }
 
   void _submit() {
     _formKey.currentState?.validate();
-    print('Form submitted');
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Account created successfully!'),
+        duration: Duration(seconds: 2)));
   }
 
   void _setAgreedToTOS(bool? newValue) {
@@ -63,6 +75,11 @@ class _SignUpState extends State<SignUp> {
                           return "First name is required";
                       }
                     },
+                    onChanged: (val) {
+                      setState(() {
+                        _firstName = val;
+                      });
+                    },
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
@@ -75,6 +92,11 @@ class _SignUpState extends State<SignUp> {
                           return "Last name is required";
                       }
                     },
+                    onChanged: (val) {
+                      setState(() {
+                        _lastName = val;
+                      });
+                    },
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
@@ -85,6 +107,11 @@ class _SignUpState extends State<SignUp> {
                         if (value.trim().isEmpty) return "Email is required";
                       }
                     },
+                    onChanged: (val) {
+                      setState(() {
+                        _email = val;
+                      });
+                    },
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
@@ -94,6 +121,11 @@ class _SignUpState extends State<SignUp> {
                       if (value != null) {
                         if (value.trim().isEmpty) return "Password is required";
                       }
+                    },
+                    onChanged: (val) {
+                      setState(() {
+                        _password = val;
+                      });
                     },
                   ),
                   TextFormField(
@@ -106,6 +138,27 @@ class _SignUpState extends State<SignUp> {
                           return "Please confirm your password";
                       }
                     },
+                    onChanged: (val) {
+                      setState(() {
+                        _confirmedPassword = val;
+                      });
+                    },
+                  ),
+                  DropdownButton<String>(
+                    value: _gender,
+                    items: _genders
+                        .map((val) => DropdownMenuItem<String>(
+                              child: Text(val),
+                              value: val,
+                            ))
+                        .toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _gender = value ?? "";
+                      });
+                    },
+                    hint: Text("Gender"),
+                    isExpanded: true,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -123,22 +176,6 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ],
                     ),
-                  ),
-                  DropdownButton<String>(
-                    value: _gender,
-                    items: _genders
-                        .map((val) => DropdownMenuItem<String>(
-                              child: Text(val),
-                              value: val,
-                            ))
-                        .toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _gender = value ?? "";
-                      });
-                    },
-                    hint: Text("Gender"),
-                    isExpanded: true,
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
