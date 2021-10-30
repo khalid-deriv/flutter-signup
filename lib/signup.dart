@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key, required this.title}) : super(key: key);
@@ -22,11 +23,12 @@ class _SignUpState extends State<SignUp> {
 
   bool _submittable() {
     return _agreedToTOS &&
-        _firstName != "" &&
-        _lastName != "" &&
-        _email != "" &&
-        _password != "" &&
-        _confirmedPassword != "";
+        // _firstName != "" &&
+        // _lastName != "" &&
+        // _email != "" &&
+        // _password != "" &&
+        // _confirmedPassword != "" &&
+        _password == _confirmedPassword;
   }
 
   void _submit() {
@@ -34,6 +36,11 @@ class _SignUpState extends State<SignUp> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Account created successfully!'),
         duration: Duration(seconds: 2)));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MyHomePage(title: "Home")),
+      (Route<dynamic> route) => false,
+    );
   }
 
   void _setAgreedToTOS(bool? newValue) {
@@ -114,6 +121,7 @@ class _SignUpState extends State<SignUp> {
                     },
                   ),
                   TextFormField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       labelText: "Password",
                     ),
@@ -129,6 +137,7 @@ class _SignUpState extends State<SignUp> {
                     },
                   ),
                   TextFormField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       labelText: "Confirm password",
                     ),
